@@ -101,36 +101,34 @@ in
             };
             doCheck = false;
             nativeBuildInputs = [pkgs.python310];
-            propagatedBuildInputs = let
-            in
-              builtins.attrValues {
-                inherit
-                  (ps)
-                  absl-py
-                  astunparse
-                  flatbuffers
-                  google-pasta
-                  grpcio
-                  h5py
-                  jax
-                  keras
-                  # libclang
-                  
-                  numpy
-                  opt-einsum
-                  packaging
-                  protobuf
-                  setuptools
-                  six
-                  tensorboard
-                  tensorflow-estimator
-                  # tensorflow-io-gcs-filesystem
-                  
-                  termcolor
-                  typing-extensions
-                  wrapt
-                  ;
-              };
+            propagatedBuildInputs = builtins.attrValues {
+              inherit
+                (ps)
+                absl-py
+                astunparse
+                flatbuffers
+                google-pasta
+                grpcio
+                h5py
+                jax
+                keras
+                # libclang
+                
+                numpy
+                opt-einsum
+                packaging
+                protobuf
+                setuptools
+                six
+                tensorboard
+                tensorflow-estimator
+                # tensorflow-io-gcs-filesystem
+                
+                termcolor
+                typing-extensions
+                wrapt
+                ;
+            };
           };
         });
     };
