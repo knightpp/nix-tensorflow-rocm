@@ -47,15 +47,13 @@ in
 
     buildInputs = [
       (
-        python.withPackages
-        (ps:
-          builtins.attrValues {
-            inherit
-              (ps)
-              virtualenv
-              tensorflow-rocm
-              ;
-          })
+        python.buildEnv.override {
+          extraLibs = with python.pkgs; [
+            virtualenv
+            tensorflow-rocm
+          ];
+          # ignoreCollisions = true;
+        }
       )
     ];
 
