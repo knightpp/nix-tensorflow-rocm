@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
   };
 
   outputs = {
@@ -12,7 +12,10 @@
       nixpkgs.lib.genAttrs systems (
         system:
           f {
-            pkgs = import nixpkgs {inherit system;};
+            pkgs = import nixpkgs {
+              inherit system;
+              overlays = [(import ./overlay.nix)];
+            };
           }
       );
   in {

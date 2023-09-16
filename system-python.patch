@@ -1,0 +1,46 @@
+diff --git a/.bazelrc b/.bazelrc
+index 79be2f7eeee..f9ea836d37d 100644
+--- a/.bazelrc
++++ b/.bazelrc
+@@ -601,3 +601,6 @@ build:macos   --config=no_tfrt
+ build:windows --config=no_tfrt
+ build:rocm    --config=no_tfrt
+ build:no_tfrt --deleted_packages=tensorflow/compiler/mlir/tfrt,tensorflow/compiler/mlir/tfrt/benchmarks,tensorflow/compiler/mlir/tfrt/ir,tensorflow/compiler/mlir/tfrt/ir/mlrt,tensorflow/compiler/mlir/tfrt/jit/python_binding,tensorflow/compiler/mlir/tfrt/jit/transforms,tensorflow/compiler/mlir/tfrt/python_tests,tensorflow/compiler/mlir/tfrt/tests,tensorflow/compiler/mlir/tfrt/tests/mlrt,tensorflow/compiler/mlir/tfrt/tests/ir,tensorflow/compiler/mlir/tfrt/tests/analysis,tensorflow/compiler/mlir/tfrt/tests/jit,tensorflow/compiler/mlir/tfrt/tests/lhlo_to_tfrt,tensorflow/compiler/mlir/tfrt/tests/lhlo_to_jitrt,tensorflow/compiler/mlir/tfrt/tests/tf_to_corert,tensorflow/compiler/mlir/tfrt/tests/tf_to_tfrt_data,tensorflow/compiler/mlir/tfrt/tests/saved_model,tensorflow/compiler/mlir/tfrt/transforms/lhlo_gpu_to_tfrt_gpu,tensorflow/compiler/mlir/tfrt/transforms/mlrt,tensorflow/core/runtime_fallback,tensorflow/core/runtime_fallback/conversion,tensorflow/core/runtime_fallback/kernel,tensorflow/core/runtime_fallback/opdefs,tensorflow/core/runtime_fallback/runtime,tensorflow/core/runtime_fallback/util,tensorflow/core/runtime_fallback/test,tensorflow/core/runtime_fallback/test/gpu,tensorflow/core/runtime_fallback/test/saved_model,tensorflow/core/runtime_fallback/test/testdata,tensorflow/core/tfrt/stubs,tensorflow/core/tfrt/tfrt_session,tensorflow/core/tfrt/mlrt,tensorflow/core/tfrt/mlrt/attribute,tensorflow/core/tfrt/mlrt/kernel,tensorflow/core/tfrt/mlrt/bytecode,tensorflow/core/tfrt/mlrt/interpreter,tensorflow/compiler/mlir/tfrt/translate/mlrt,tensorflow/compiler/mlir/tfrt/translate/mlrt/testdata,tensorflow/core/tfrt/gpu,tensorflow/core/tfrt/run_handler_thread_pool,tensorflow/core/tfrt/runtime,tensorflow/core/tfrt/saved_model,tensorflow/core/tfrt/graph_executor,tensorflow/core/tfrt/saved_model/tests,tensorflow/core/tfrt/tpu,tensorflow/core/tfrt/utils,tensorflow/core/tfrt/utils/debug,tensorflow/core/tfrt/saved_model/python,tensorflow/core/tfrt/graph_executor/python,tensorflow/core/tfrt/saved_model/utils
++
++build:hermetic_python --extra_toolchains=//src:hermetic_python3_toolchain
++build:system_python --extra_toolchains=//src:python3_toolchain
+diff --git a/WORKSPACE b/WORKSPACE
+index fb3af8a2bea..debd1371742 100644
+--- a/WORKSPACE
++++ b/WORKSPACE
+@@ -29,12 +29,26 @@ python_repository(name = "python_version_repo")
+ 
+ load("@python_version_repo//:py_version.bzl", "HERMETIC_PYTHON_VERSION")
+ 
+-python_register_toolchains(
+-    name = "python",
+-    ignore_root_user_error = True,
+-    python_version = HERMETIC_PYTHON_VERSION,
++load("@bazel_tools//tools/python:toolchain.bzl", "py_runtime_pair")
++
++py_runtime(
++    name = "python3_runtime",
++    interpreter_path = "$(PYTHON_INTERPRETER_PATH)",
++    python_version = "PY3",
++    visibility = ["//visibility:public"],
++)
++
++py_runtime_pair(
++    name = "python3_runtime_pair",
++    py2_runtime = None,
++    py3_runtime = ":python3_runtime",
+ )
+ 
++toolchain(
++    name = "python3_toolchain",
++    toolchain = ":python3_runtime_pair",
++    toolchain_type = "@bazel_tools//tools/python:toolchain_type",
++)
+ load("@python//:defs.bzl", "interpreter")
+ load("@rules_python//python:pip.bzl", "package_annotation", "pip_parse")
+ 

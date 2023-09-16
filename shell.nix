@@ -1,6 +1,7 @@
 {pkgs ? import <nixpkgs> {}}: let
   amdgpuVersions = {
     gfx1030 = "10.3.0";
+    gfx1012 = "10.1.2";
     gfx900 = "9.0.0";
     gfx906 = "9.0.6";
     gfx908 = "9.0.8";
@@ -42,7 +43,7 @@ in
       # CUDA_PATH = pkgs.cudaPackages.cudatoolkit;
       # CUDNN_PATH = pkgs.cudaPackages.cudnn;
       OCL_ICD_VENDORS = "${pkgs.rocm-opencl-icd}/etc/OpenCL/vendors/";
-      HSA_OVERRIDE_GFX_VERSION = amdgpuVersions.gfx1030;
+      HSA_OVERRIDE_GFX_VERSION = amdgpuVersions.gfx1012;
     };
 
     buildInputs = [
