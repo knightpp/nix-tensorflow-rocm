@@ -1,6 +1,13 @@
 self: super: {
-  # TODO: FIX inf recursion
-  # numpy = self.callPackage ./numpy.nix {};
+  numpy = super.numpy.overridePythonAttrs (old: rec {
+    version = "1.21.6";
+    src = super.fetchPypi {
+      pname = old.pname;
+      inherit version;
+      extension = "zip";
+      sha256 = "sha256-7LVSUROXBmaf3sL/BzyY746ahEc+UecWIRtBqg8Y5lY=";
+    };
+  });
   protobuf = super.protobuf.override {
     protobuf = super.pkgs.protobuf3_19;
   };
