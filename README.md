@@ -1,0 +1,1 @@
+# tensorflow-rocm nix shell
