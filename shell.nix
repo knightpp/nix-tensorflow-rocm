@@ -52,7 +52,7 @@ in
             virtualenv
             tensorflow-rocm
           ];
-          # ignoreCollisions = true;
+          ignoreCollisions = true;
         }
       )
     ];
